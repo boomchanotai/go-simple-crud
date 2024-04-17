@@ -1,0 +1,34 @@
+version: "1.0"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - gonetwork
+
+  database:
+    image: postgres:15-alpine
+    container_name: go-simple-crud-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - gonetwork
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+
+networks:
+  gonetwork:
+    driver: bridge
+volumes:
+  database:
